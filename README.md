@@ -1,28 +1,34 @@
 # metar
 
-This Go program is a console (terminal) mode program that retrieves aviation METARs and TAFs for a given list of airports and other weather stations. Special care has been taken to optimize execution speed by using goroutines for concurrent data retrieval of METARs and TAFs.
 
-In addition to the METAR messages, wind chill factor, heat index, and relative humidity are computed when applicable.
+This Go program is a console (terminal) application that retrieves aviation METARs and TAFs for a given list of airports and other weather stations. Special care has been taken to optimize execution speed by using goroutines for concurrent data retrieval of METARs and TAFs.
+
+In addition to the METAR messages, the program computes the wind chill factor, heat index, and relative humidity when applicable.
 
 ## Options
 
+
 ```
-  -n  <n>         Set number of Metars to print per station. N: 1 to 70
-  -s  <string>    Search IATA/ICAO code for an airport
+  -n  <n>         Set the number of METARs to print per station. N: 1 to 70
+  -s  <string>    Search for an airport by IATA/ICAO code
   -lc <string>    List all countries with their ISO code (<string> may be empty)
   -la <string>    List all airports in one or more countries (ISO country codes)
-  -t  <t>         Connection timeout T: 1 to 10
-  -r              Print raw data w/o the additional factors
-  -m              METARS only (mutually exclusive with -f)
-  -f              TAFS only (mutually exclusive with -m)
-  -h              This help screen
+  -t  <t>         Set connection timeout. T: 1 to 10
+  -r              Print raw data without additional factors
+  -m              METARs only (mutually exclusive with -f)
+  -f              TAFs only (mutually exclusive with -m)
+  -h              Show this help screen
 ```
+
 
 ## Retrieve messages for a list of stations (IATA or ICAO codes)
 
-```$ metar cdg FACT``` (Case insensitive)
+```sh
+$ metar cdg FACT
+```
+(Case insensitive)
 
-The output looks like this:
+Example output:
 
 ```
 LFPG (CDG) Charles de Gaulle International Airport (Paris), France FR (EU)
@@ -41,69 +47,90 @@ TAF 060400Z 0606/0712 03005KT 9999 SCT020 BKN030 TX17/0712Z TN08/0706Z FM061300 
 
 ```
 
-At the end of the METAR's, the three values between brackets are the computed  ```[ wind chill factor | heat factor | relative humidity % ]```
+
+At the end of each METAR, the three values in brackets are the computed:  
+```[ wind chill factor | heat index | relative humidity % ]```
+
 
 ## Find the IATA/ICAO airport code for an airport
 
-```
+```sh
 $ metar -s munich
-$ metar -s new york
+$ metar -s "new york"
 ```
+
 
 ## List ISO country codes
 
-```
+```sh
 $ metar -lc
 $ metar -lc africa
-
 ```
 
-## List all country airports using ISO country codes
-```
+
+## List all airports in specified countries using ISO country codes
+
+```sh
 $ metar -la fr
 $ metar -la it pt es uk
 ```
+
 ## Help screen
 
-```$ metar -h```
+```sh
+$ metar -h
+```
 
 ## Installation
 
-You will need to compile the sources using the Golang tools. Follow this [howto](https://go.dev/doc/tutorial/compile-install) to get started. The compilation is lightning fast and [cross-compilation](http://dave.cheney.net/2015/08/22/cross-compilation-with-go-1-5) is easy.
 
+You will need to compile the sources using the Go tools. Follow this [how-to](https://go.dev/doc/tutorial/compile-install) to get started. Compilation is lightning fast, and [cross-compilation](http://dave.cheney.net/2015/08/22/cross-compilation-with-go-1-5) is easy.
 
-### Install the latest Go for your plateform
+### Install the latest Go for your platform
 
-* Easy way: install the [latest version binaries](https://golang.org/dl/) or use your distro package (not always the latest version)
-* Less easy way: [compile Go from source](https://golang.org/doc/install/source)
+* Easy way: install the [latest version binaries](https://golang.org/dl/) or use your distro's package manager (may not always be the latest version)
+* Advanced: [compile Go from source](https://golang.org/doc/install/source)
 
-### Get this metar repo
+### Get this metar repository
 
-1. Run the following command to install the metar repo in the directory defined in your `GOPATH` environment variable:  
-`go get github.com/esperlu/metar` 
-2. Navigate to the now local sources: `<GOPATH>/src/github.com/esperlu/metar`
-3. Give it a try: run the following command to get the METAR weather reports for Brussels BRU (BE) and New York JFK (US):  
-`go run metar.go bru jfk`
-4. If successfull, compile the metar sources and data:
-    * To compile the binary and save it in the current directory, run the following command:  
-    `go build metar.go`
-    * To compile the binary and install it in the binary folder defined in the `GOBIN` environment variable, run the following command:  
-    `go install metar.go`  
-    This will make the binary accessible and executable system wide.
+1. Run the following command to install the metar repo in the directory defined by your `GOPATH` environment variable:
+  ```sh
+  go get github.com/esperlu/metar
+  ```
+2. Navigate to the local sources: `<GOPATH>/src/github.com/esperlu/metar`
+3. Try it out: run the following command to get the METAR weather reports for Brussels (BRU, BE) and New York (JFK, US):
+  ```sh
+  go run metar.go bru jfk
+  ```
+4. If successful, compile the metar sources and data:
+   * To compile the binary and save it in the current directory:
+    ```sh
+    go build metar.go
+    ```
+   * To compile the binary and install it in the binary folder defined by the `GOBIN` environment variable:
+    ```sh
+    go install metar.go
+    ```
+    This will make the binary accessible and executable system-wide.
+
 
 ## Utilities
 
-The airport list and METAR stations list are hardcoded for the sake of speed. However, these lists are subject to change. To update the lists, run the `updateStations.go` program in the `util` directory. Then recompile the main program `metar.go` to hardcode the updated lists.
+The airport list and METAR stations list are hardcoded for speed. However, these lists are subject to change. To update the lists, run the `updateStations.go` program in the `util` directory. Then recompile the main program `metar.go` to hardcode the updated lists.
+
 
 
 ## Bug report
-Rough edges are not excluded. Please [report](https://github.com/esperlu/metar/issues) any bugs.
+
+Rough edges are not excluded. Please [report any bugs](https://github.com/esperlu/metar/issues).
+
 
 ## Credits
+
 METAR weather messages are retrieved from NOAA's aviationweather.gov in real time.
-METAR stations list and names are compiled from :
+METAR stations list and names are compiled from:
 * [aviationweather.gov](https://www.aviationweather.gov/docs/metar/stations.txt)
 * [ourairports.com](https://ourairports.com/data/airports.csv)
 
----
+----
 #### (c) Jean-Luc Lacroix
