@@ -1,19 +1,22 @@
 ## UTIL: update METAR stations
 `updateStations.go` updates the METAR stations list.
 
-It combines lists from [aviationweather.gov](https://www.aviationweather.gov/docs/metar/stations.txt) and [ourairports.com](https://ourairports.com/data/airports.csv) web sites.
+It combines lists from [aviationweather.gov](https://aviationweather.gov/data/api/) and [ourairports.com](https://ourairports.com/data/) web sites.
 
-Change the `dataFile` variable to the actual path where your `ad_list.go` file lives, typically `path/to/the/sources/data/ad_list.go`. The program will insert the updated data into `ad_list.go`
+Change the `dataFile` variable to the actual path where your `data.go` file lives, typically `path/to/the/metar/data/data.go`. The program will insert the updated data into `data.go`
 
 ```
 const (
-	// Change dataFile path to where this ad_list.go lives
-	dataFile       string = "/home/jeanluc/golang/src/jeanluc/metar/data/ad_list.go"
-	noaaURL        string = "https://www.aviationweather.gov/docs/metar/stations.txt"
-	ourairportsURL string = "https://ourairports.com/data/airports.csv"
+	// CAUTION ! Change dataFile path to where this data.go lives
+	dataFile     string = "/home/jeanluc/golang/src/jeanluc/metarDEV/data/data.go"
+	airportsURL  string = "https://davidmegginson.github.io/ourairports-data/airports.csv"
+	countriesURL string = "https://davidmegginson.github.io/ourairports-data/countries.csv"
+
+	// List all airports (NOT recommended - large file). `false` : only take medium and large size airports
+	listAllAirports bool = true
 )
 ```
 
 Once updated, you will need to recompile or run `metar.go` to hardcode the updated stations into the metar binary.
 
-__Warning__: do not change the var declaration `var AdList` in `ad_list.go` as it works as a marker for this program.
+__Warning__: do not change the var declaration `var CountryList` in `data.go` as it works as a marker for this program.

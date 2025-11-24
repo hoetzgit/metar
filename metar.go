@@ -28,9 +28,9 @@ import (
 	"metar/data"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
-	// "github.com/esperlu/metar/data"
 )
 
 // Constants to fetch Weather reports from aviationweather.com's new API
@@ -213,7 +213,7 @@ func main() {
 	}
 
 	// Parse airport list and convert IATA code (3 char.) to ICAO code (4 char.)
-	var stations []string
+	stations := make([]string, 0, len(flag.Args()))
 	for _, v := range flag.Args() {
 		v = strings.ToUpper(v)
 		fmtNotFound := "\n\"%s\" not in the airport list. Try to run: metar -s %[1]s\n"
@@ -224,7 +224,7 @@ func main() {
 			//  If found in icao2airportInfos map (some ICAO codes have only 3 characters).
 			if _, ok := airportInfos[v]; ok {
 				stations = append(stations, v)
-				break
+				continue
 			}
 			// if 3 char. and found in iata2icao map[iata]icao
 			if _, ok := iata2icao[v]; ok {
@@ -243,7 +243,6 @@ func main() {
 		default:
 			fmt.Printf(fmtNotFound, v)
 		}
-
 	}
 
 	// if no station to process --> exit
@@ -272,14 +271,15 @@ func main() {
 	}
 
 	// Parse METAR response
-	var reports []Metar
+	reports := make([]Metar, 0, *numberMetarFlag*len(stations))
 	if err := json.Unmarshal(metarResponse, &reports); err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "\n  Error parsing METAR response: %v\n\n", err)
+		os.Exit(1)
 	}
 
 	// Process METAR reports
-	metars := map[string][]string{}
-	taf := map[string]string{}
+	metars := make(map[string][]string, len(stations))
+	taf := make(map[string]string, len(stations))
 	for _, m := range reports {
 		// If raw (-r) requested, don't compute wind chill factor, heat factor and relative humidity
 		if *rawFlag {
@@ -303,7 +303,7 @@ func main() {
 		if !*tafOnlyFlag {
 			for i, report := range metar {
 				// loop if maximum number of METAR si reached for one station
-				if i > *numberMetarFlag {
+				if i >= *numberMetarFlag {
 					break
 				}
 				fmt.Println(report)

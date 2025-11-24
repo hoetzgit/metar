@@ -71,7 +71,6 @@ $ metar -la it pt es uk
 
 You will need to compile the sources using the Golang tools. Follow this [howto](https://go.dev/doc/tutorial/compile-install) to get started. The compilation is lightning fast and [cross-compilation](http://dave.cheney.net/2015/08/22/cross-compilation-with-go-1-5) is easy.
 
-If you do not want to compile it yourself, you can skip the steps below and download the [binaries](#binaries)
 
 ### Install the latest Go for your plateform
 

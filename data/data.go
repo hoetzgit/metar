@@ -333,6 +333,7 @@ var AdList = []string{
 	"AR-0767;;Aeroestación Yabotí (El Soberbio);AR;-27.180;-54.107",
 	"AT03;;Concordia Skyway (Concordia Station);AQ;-75.103;123.358",
 	"AT28;;Vostok Skiway (Vostok Station);AQ;-78.466;106.848",
+	"AT98;WFR;Wolf's Fang Runway;AQ;-71.517;8.800",
 	"AXF;AXF;Alxa Left Banner Bayanhot Airport (Bayanhot);CN;38.748;105.584",
 	"AYBA;VMU;Baimuru Airport (Baimuru);PG;-7.497;144.822",
 	"AYBK;BUA;Buka Airport (Buka Island);PG;-5.422;154.673",
